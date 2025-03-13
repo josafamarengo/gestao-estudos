@@ -5,7 +5,7 @@ fn main() {
     gestao_estudos_lib::run();
 
     tauri::Builder::default()
-        .invoke_handler(tauri::generate_handler![get_all_subjects, insert_subject])
+        .invoke_handler(tauri::generate_handler![get_all_subjects, get_subjects_paginated, insert_subject, delete_subject])
         .run(tauri::generate_context!())
         .expect("error while running Tauri application");
 }
@@ -124,6 +124,37 @@ fn get_all_subjects() -> Result<Vec<Subject>, String> {
     Ok(subjects)
 }
 
+#[command]
+fn get_subjects_paginated(page: i32, page_size: i32) -> Result<Vec<Subject>, String> {
+    let conn = open_db().map_err(|e| e.to_string())?;
+
+    let offset = (page - 1) * page_size;
+    let mut stmt = conn.prepare(
+        "SELECT s.id, s.name, s.number_of_questions, s.points_per_question, 
+                COALESCE(COUNT(l.id), 0) AS number_of_lessons
+         FROM subjects s
+         LEFT JOIN topics t ON s.id = t.subject
+         LEFT JOIN lessons l ON t.id = l.topic
+         GROUP BY s.id, s.name, s.number_of_questions, s.points_per_question
+         LIMIT ? OFFSET ?"
+    ).map_err(|e| e.to_string())?;
+
+    let subjects_iter = stmt.query_map(params![page_size, offset], |row| {
+        Ok(Subject {
+            id: row.get(0)?,
+            name: row.get(1)?,
+            number_of_questions: row.get(2)?,
+            points_per_question: row.get(3)?,
+            number_of_lessons: row.get(4)?,
+        })
+    }).map_err(|e| e.to_string())?;
+
+    let mut subjects = Vec::new();
+    for subject in subjects_iter {
+        subjects.push(subject.map_err(|e| e.to_string())?);
+    }
+    Ok(subjects)
+}
 
 fn get_all_topics() -> Result<Vec<(i32, String, i32, i32, i32)>> {
     let conn = open_db()?;
