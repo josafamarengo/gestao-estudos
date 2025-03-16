@@ -45,8 +45,7 @@ fn create_table_topics(conn: &Connection) -> Result<()> {
                   id INTEGER PRIMARY KEY,
                   name TEXT NOT NULL UNIQUE,
                   subject INTEGER NOT NULL,
-                  questions_answered INTEGER,
-                  right_answers INTEGER,
+                  finished TEXT DEFAULT 'N',
                   FOREIGN KEY(subject) REFERENCES subjects(id)
                   )",
         params![],
@@ -58,10 +57,12 @@ fn create_table_lessons(conn: &Connection) -> Result<()> {
     conn.execute(
         "CREATE TABLE IF NOT EXISTS lessons (
                   id INTEGER PRIMARY KEY,
-                  name TEXT NOT NULL UNIQUE,
+                  date TEXT NOT NULL UNIQUE,
                   topic INTEGER NOT NULL,
-                  time INTEGER DEFAULT 0,
-                  finished TEXT DEFAULT 'N',
+                  start INTEGER,
+                  end INTEGER,
+                  questions_answered INTEGER,
+                  right_answers INTEGER,
                   FOREIGN KEY(topic) REFERENCES topics(id)
                   )",
         params![],

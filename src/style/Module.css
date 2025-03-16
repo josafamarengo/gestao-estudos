@@ -1,20 +1,13 @@
-.container {
+.main-container {
   margin: 0;
   width: 100dvw;
   height: 100dvh;
   padding-top: 10vh;
   display: flex;
   flex-direction: column;
-  justify-content: center;
   text-align: center;
 }
 
-.row {
-  display: flex;
-  justify-content: center;
-}
-
-/* Adiciona a animação para a mensagem de erro */
 .error-message {
   position: fixed;
   bottom: 20px;

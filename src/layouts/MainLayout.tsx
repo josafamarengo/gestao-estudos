@@ -1,6 +1,6 @@
 const MainLayout = ({children} : {children: preact.ComponentChildren}) => {
   return (
-    <main className="container absolute">
+    <main className="main-container absolute">
         {children}
     </main>
   )
