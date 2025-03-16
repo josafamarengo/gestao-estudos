@@ -1,34 +1,7 @@
-.button {
-  display: inline-block;
-  box-shadow: none;
-  border: none;
-  text-transform: uppercase;
-  padding: 10px;
-  background: #CFCFCF;
-  font-size: 14px;
-}
-
-.button-ico {
-  padding: 10px 10px 10px 30px;
-  position: relative;  &:before {
-    content: "";
-    display: block;
-    width: 20px;
-    height: 20px;
-    position: absolute;
-    left: 7px;
-    top: 7px;
-  }
-}
-
-.tb-big-title {
-  margin-top: 0;
-  padding-right: 150px;
-  font-size: 2.3rem;
-}
-
 .container {
   margin: 0;
+  width: 100dvw;
+  height: 100dvh;
   padding-top: 10vh;
   display: flex;
   flex-direction: column;
@@ -52,7 +25,7 @@
   padding: 10px;
   display: flex;
   align-items: center;
-  animation: slide-in 1s forwards, slide-out 1s 4s forwards;
+  animation: slide-in 0.7s forwards, slide-out 1s 4s forwards;
 }
 
 @keyframes slide-in {
